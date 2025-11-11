@@ -1,4 +1,4 @@
-from flask import render_template,Flask,request,Response
+from flask import render_template,Flask,request,Response,send_from_directory
 from prometheus_client import Counter,generate_latest
 from flipkart.data_ingestion import DataIngestor
 from flipkart.rag_chain import RAGChainBuilder
@@ -10,7 +10,7 @@ REQUEST_COUNT = Counter("http_requests_total" , "Total HTTP Request")
 
 def create_app():
 
-    app = Flask(__name__)
+    app = Flask(__name__, static_folder='static', static_url_path='/static')
 
     vector_store = DataIngestor().ingest(load_existing=True)
     rag_chain = RAGChainBuilder(vector_store).build_chain()
@@ -35,6 +35,15 @@ def create_app():
     @app.route("/metrics")
     def metrics():
         return Response(generate_latest(), mimetype="text/plain")
+    
+    # Explicit static file route with proper MIME types
+    @app.route('/static/<path:filename>')
+    def static_files(filename):
+        response = send_from_directory(app.static_folder, filename)
+        # Set proper content type for CSS files
+        if filename.endswith('.css'):
+            response.headers['Content-Type'] = 'text/css; charset=utf-8'
+        return response
     
     return app
 
