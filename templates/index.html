@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flipkart Product Assistant - AI Chatbot</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+	</head>
+	<body>
+    <div class="chatbot-wrapper">
+        <div class="chatbot-container">
+            <div class="chatbot-card">
+                <!-- Header -->
+                <div class="chatbot-header">
+                    <div class="header-content">
+                        <div class="header-title">
+                            <span class="header-icon">🛒</span>
+                            <span class="header-text">Flipkart Product Assistant</span>
+								</div>
+                        <div class="typing-status" id="typingStatus" style="display: none;">
+                            <span class="typing-dot"></span>
+                            <span class="typing-dot"></span>
+                            <span class="typing-dot"></span>
+                            <span class="typing-text">Typing...</span>
+								</div>
+							</div>
+						</div>
+
+                <!-- Chat Messages Area -->
+                <div id="messageFormeight" class="chat-messages-area">
+                    <!-- Welcome message -->
+                    <div class="welcome-container" id="welcomeMessage">
+                        <div class="welcome-content">
+                            <div class="welcome-icon-wrapper">
+                                <div class="welcome-icon">
+                                    <i class="fas fa-shopping-bag"></i>
+                                </div>
+                            </div>
+                            <h2 class="welcome-title">Welcome to Flipkart Product Assistant</h2>
+                            <p class="welcome-subtitle">Your intelligent shopping companion powered by AI</p>
+                            <div class="welcome-features">
+                                <div class="feature-item">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span>Product Recommendations</span>
+                                </div>
+                                <div class="feature-item">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span>Real-time Reviews</span>
+                                </div>
+                                <div class="feature-item">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span>Expert Advice</span>
+                                </div>
+                            </div>
+                            <p class="welcome-message-text">Start by asking about any product, category, or feature you're looking for!</p>
+                        </div>
+						</div>
+								</div>
+
+                <!-- Input Section -->
+                <div class="input-section">
+                    <form id="messageArea" class="input-form">
+                        <input type="text" 
+                               id="text" 
+                               name="msg" 
+                               placeholder="Ask about any product..." 
+                               autocomplete="off" 
+                               class="chat-input" 
+                               required/>
+                        <button type="submit" class="send-button" title="Send message">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+							</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+		<script>
+			$(document).ready(function() {
+            let firstMessage = true;
+
+
+            // Show/hide typing indicator in header
+            function showTypingStatus() {
+                $('#typingStatus').fadeIn(200);
+            }
+
+            function hideTypingStatus() {
+                $('#typingStatus').fadeOut(200);
+            }
+
+            // Format bot response
+            function formatBotResponse(text) {
+                if (firstMessage) {
+                    firstMessage = false;
+                    $('#welcomeMessage').fadeOut(300);
+                }
+                
+                let formatted = text;
+                
+                // Check if response contains product recommendations
+                if (text.match(/^\d+\.|^[-*•]/m) || text.includes('Rating:') || text.includes('/5') || text.match(/\$\d+/)) {
+                    formatted = formatProductResponse(text);
+                } else {
+                    formatted = text.replace(/\n/g, '<br>');
+                }
+                
+                return formatted;
+            }
+            
+            // Format product recommendations as product cards
+            function formatProductResponse(text) {
+                let html = '';
+                const lines = text.split('\n').filter(line => line.trim());
+                
+                let productItems = [];
+                let currentItem = { name: '', features: [], rating: '', price: '', description: '' };
+                let introText = '';
+                
+                lines.forEach((line, idx) => {
+                    line = line.trim();
+                    
+                    // Extract price if present
+                    const priceMatch = line.match(/\$(\d+\.?\d*)/);
+                    if (priceMatch) {
+                        currentItem.price = '$' + priceMatch[1];
+                    }
+                    
+                    if (line.match(/^\d+\./)) {
+                        if (currentItem.name) {
+                            productItems.push(currentItem);
+                        }
+                        currentItem = { name: '', features: [], rating: '', price: '', description: '' };
+                        currentItem.name = line.replace(/^\d+\.\s*/, '').split('—')[0].trim().replace(/\*\*/g, '');
+                        const priceMatch = currentItem.name.match(/\$(\d+\.?\d*)/);
+                        if (priceMatch) {
+                            currentItem.price = '$' + priceMatch[1];
+                            currentItem.name = currentItem.name.replace(/\$(\d+\.?\d*)/, '').trim();
+                        }
+                    } else if (line.match(/^[-*•]/)) {
+                        if (currentItem.name) {
+                            productItems.push(currentItem);
+                        }
+                        currentItem = { name: '', features: [], rating: '', price: '', description: '' };
+                        currentItem.name = line.replace(/^[-*•]\s*/, '').trim().replace(/\*\*/g, '');
+                    } else if (line.includes('Rating:') || line.match(/\d+\.\d+\/5/) || line.match(/\d+\/5/)) {
+                        const ratingMatch = line.match(/(\d+\.?\d*\/5)/);
+                        currentItem.rating = ratingMatch ? ratingMatch[1] : line.replace(/Rating:\s*/i, '');
+                    } else if (line.includes('Features:') || line.includes('Key features:')) {
+                        const features = line.replace(/^(Features|Key features):\s*/i, '').split(',').map(f => f.trim());
+                        currentItem.features = features.filter(f => f);
+                    } else if (currentItem.name && line && !line.match(/^(Which|What|How|Would|It's|This)/i)) {
+                        // Check if it's a feature list item
+                        if (line.match(/^[-*•]/) || line.length < 100) {
+                            const feature = line.replace(/^[-*•]\s*/, '').trim().replace(/\*\*/g, '');
+                            if (feature && !currentItem.features.includes(feature)) {
+                                currentItem.features.push(feature);
+                            }
+                        } else {
+                            // It's a description
+                            if (!currentItem.description) {
+                                currentItem.description = line.replace(/\*\*/g, '');
+                            }
+                        }
+                    } else if (!currentItem.name && idx < 3 && line) {
+                        introText += (introText ? '<br>' : '') + line.replace(/\*\*/g, '');
+                    }
+                });
+                
+                if (currentItem.name) {
+                    productItems.push(currentItem);
+                }
+                
+                // Add intro text with friendly formatting
+                if (introText) {
+                    html += '<div class="response-intro">' + introText + '</div>';
+                }
+                
+                // Create product cards
+                if (productItems.length > 0) {
+                    productItems.forEach((item, index) => {
+                        // Format features nicely as badges
+                        let featuresHtml = '';
+                        if (item.features && item.features.length > 0) {
+                            let featureArray = [];
+                            if (item.features.length === 1 && item.features[0].includes(',')) {
+                                // Single line with commas - split it
+                                featureArray = item.features[0].split(',').map(f => f.trim()).filter(f => f);
+                            } else {
+                                featureArray = item.features.filter(f => f);
+                            }
+                            
+                            if (featureArray.length > 0) {
+                                featuresHtml = '<div class="product-features-list">';
+                                featureArray.forEach(feature => {
+                                    // Get icon based on feature keywords
+                                    let icon = 'fa-check-circle';
+                                    const featureLower = feature.toLowerCase();
+                                    if (featureLower.includes('battery') || featureLower.includes('life')) {
+                                        icon = 'fa-battery-full';
+                                    } else if (featureLower.includes('wireless') || featureLower.includes('connectivity')) {
+                                        icon = 'fa-wifi';
+                                    } else if (featureLower.includes('sound') || featureLower.includes('audio') || featureLower.includes('quality')) {
+                                        icon = 'fa-volume-up';
+                                    } else if (featureLower.includes('comfort') || featureLower.includes('design') || featureLower.includes('lightweight')) {
+                                        icon = 'fa-heart';
+                                    } else if (featureLower.includes('durable') || featureLower.includes('build')) {
+                                        icon = 'fa-shield-alt';
+                                    }
+                                    
+                                    featuresHtml += `
+                                        <div class="feature-badge">
+                                            <i class="fas ${icon}"></i>
+                                            <span>${feature}</span>
+                                        </div>
+                                    `;
+                                });
+                                featuresHtml += '</div>';
+                            }
+                        }
+                        
+                        html += `
+                            <div class="product-card">
+                                <div class="product-header">
+                                    <div class="product-name">${item.name || 'Product'}</div>
+                                    ${item.rating ? `<div class="product-rating">
+                                        <span class="rating-stars">${generateStars(item.rating)}</span>
+                                        <span class="rating-text">${item.rating}</span>
+                                    </div>` : ''}
+                                </div>
+                                ${item.description ? `<div class="product-description">${item.description}</div>` : ''}
+                                ${featuresHtml}
+                                ${item.price ? `<div class="product-price">${item.price}</div>` : ''}
+                            </div>
+                        `;
+                    });
+                }
+                
+                // Add remaining text
+                const remainingText = lines.filter((line, idx) => {
+                    return !line.match(/^\d+\.|^[-*•]/) && 
+                           !line.includes('Rating:') && 
+                           !line.match(/\d+\.?\d*\/5/) &&
+                           !line.includes('Features:') &&
+                           !line.match(/\$\d+/) &&
+                           !line.match(/^(It's|This|Known)/i) &&
+                           idx >= lines.length - 3;
+                }).join('<br>');
+                
+                if (remainingText && !html.includes(remainingText)) {
+                    html += '<div class="follow-up-text">' + remainingText.replace(/\*\*/g, '') + '</div>';
+                }
+                
+                return html || text.replace(/\n/g, '<br>').replace(/\*\*/g, '');
+            }
+            
+            // Generate star rating display
+            function generateStars(rating) {
+                const num = parseFloat(rating);
+                if (isNaN(num)) return '';
+                const fullStars = Math.floor(num);
+                const hasHalf = num % 1 >= 0.5;
+                let stars = '';
+                for (let i = 0; i < fullStars; i++) {
+                    stars += '<i class="fas fa-star"></i>';
+                }
+                if (hasHalf && fullStars < 5) {
+                    stars += '<i class="fas fa-star-half-alt"></i>';
+                }
+                return stars;
+            }
+            
+            // Scroll to bottom
+            function scrollToBottom() {
+                const chatBody = $("#messageFormeight");
+                chatBody.scrollTop(chatBody[0].scrollHeight);
+            }
+            
+            // Send message function
+            function sendMessage(messageText) {
+                // Create user message
+                const userHtml = `
+                    <div class="message-wrapper user-message">
+                        <div class="message-bubble user-bubble">
+                            ${messageText}
+                        </div>
+                    </div>
+                `;
+                
+					$("#messageFormeight").append(userHtml);
+                scrollToBottom();
+                
+                // Show typing indicator
+                showTypingStatus();
+                const typingIndicator = `
+                    <div class="message-wrapper bot-message typing-indicator">
+                        <div class="bot-bubble typing-dots-bubble">
+                            <span></span><span></span><span></span>
+                        </div>
+                    </div>
+                `;
+                $("#messageFormeight").append(typingIndicator);
+                scrollToBottom();
+                
+                // Send request
+					$.ajax({
+                    data: { msg: messageText },
+						type: "POST",
+						url: "/get",
+					}).done(function(data) {
+                    hideTypingStatus();
+                    $(".typing-indicator").remove();
+                    
+                    const formattedResponse = formatBotResponse(data);
+                    const botHtml = `
+                        <div class="message-wrapper bot-message">
+                            <div class="bot-bubble">
+                                <div class="bot-avatar">
+                                    <i class="fas fa-robot"></i>
+                                </div>
+                                <div class="bot-text">
+                                    ${formattedResponse}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    $("#messageFormeight").append(botHtml);
+                    scrollToBottom();
+                }).fail(function() {
+                    hideTypingStatus();
+                    $(".typing-indicator").remove();
+                    const errorHtml = `
+                        <div class="message-wrapper bot-message">
+                            <div class="bot-bubble error-message">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                Sorry, I encountered an error. Please try again.
+                            </div>
+                        </div>
+                    `;
+                    $("#messageFormeight").append(errorHtml);
+                    scrollToBottom();
+                });
+            }
+            
+            // Handle form submission
+            $("#messageArea").on("submit", function(event) {
+					event.preventDefault();
+                const rawText = $("#text").val().trim();
+                if (rawText) {
+                    $("#text").val("");
+                    sendMessage(rawText);
+                }
+				});
+            
+            // Auto-focus input
+            $("#text").focus();
+			});
+		</script>
+    </body>
+</html>
