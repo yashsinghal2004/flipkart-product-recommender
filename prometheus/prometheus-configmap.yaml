@@ -13,7 +13,7 @@ data:
         static_configs:
           - targets: ['localhost:9090']
 
-      - job_name: 'flask-app'
+      - job_name: 'flipkart-assistant'
         metrics_path: /metrics
         static_configs:
           - targets: ['34.66.136.241:5000']
