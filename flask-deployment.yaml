@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: assistant
+  labels:
+    app: assistant
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: assistant
+  template:
+    metadata:
+      labels:
+        app: assistant
+    spec:
+      containers:
+      - name: flipkart-container
+        image: flipkart-assistant:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+          - containerPort: 5000
+        envFrom:
+          - secretRef:
+              name: flipkart-secrets
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: assistant-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: assistant
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5000
