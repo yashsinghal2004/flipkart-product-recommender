@@ -19,7 +19,7 @@ An AI-powered product recommendation chatbot built with Flask, LangChain, and RA
 - [Contributing](#contributing)
 - [License](#license)
 
-## Preview: Flipkart Product Assistant – Full Stack Deployment and Monitoring**
+## Preview: Flipkart Product Assistant – Full Stack Deployment and Monitoring
 
 ### 1. Interactive Chat Interface
 Users can engage in natural conversations with the AI assistant to get personalized product recommendations, ask questions about products, and receive expert advice based on real customer reviews.
