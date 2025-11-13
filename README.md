@@ -9,7 +9,7 @@ An AI-powered product recommendation chatbot built with Flask, LangChain, and RA
 ### 1. Interactive Chat Interface
 Users can engage in natural conversations with the AI assistant to get personalized product recommendations, ask questions about products, and receive expert advice based on real customer reviews.
 
-<img src="assistant_ui.png" alt="Chat Interface" width="700">
+<img src="assistant_ui.png" alt="Chat Interface" style="width: 100%;">
 
 ### 2. Product Recommendations
 The system analyzes product reviews to provide context-aware recommendations, matching user queries with the most relevant products and their features.
