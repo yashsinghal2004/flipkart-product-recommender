@@ -1,28 +1,30 @@
-# Flipkart Product Recommender Chatbot 🛒
+
+
+# Flipkart Product Recommender Chatbot 
 
 An AI-powered product recommendation chatbot built with Flask, LangChain, and RAG (Retrieval-Augmented Generation), with comprehensive DevOps infrastructure with Kubernetes, Docker, Prometheus, and Grafana for production-ready deployment and monitoring.
 
-🖼️ **Preview: Flipkart Product Assistant – Full Stack Implementation**
+## Preview: Flipkart Product Assistant – Full Stack Deployment and Monitoring**
 
-## 1. Interactive Chat Interface
+### 1. Interactive Chat Interface
 Users can engage in natural conversations with the AI assistant to get personalized product recommendations, ask questions about products, and receive expert advice based on real customer reviews.
 
 <img src="assistant_ui.png" alt="Chat Interface" width="600">
 
-## 2. Product Recommendations
+### 2. Product Recommendations
 The system analyzes product reviews to provide context-aware recommendations, matching user queries with the most relevant products and their features.
 
 <img src="assistant_output.png" alt="Product Recommendations" width="600">
 
-## 3. Prometheus Monitoring
+### 3. Prometheus Monitoring
 Real-time metrics collection and monitoring of application health, request rates, and system performance through Prometheus.
 
-<img src="prometheus.png" alt="Prometheus Dashboard" width="600">
+<img src="prometheus.png" alt="Prometheus Dashboard" width="700">
 
-## 4. Grafana Visualization
+### 4. Grafana Visualization
 Advanced dashboards and visualizations for monitoring application metrics, performance trends, and system health.
 
-<img src="grafana.png" alt="Grafana Dashboard" width="600">
+<img src="grafana.png" alt="Grafana Dashboard" width="700">
 
 ## Tech Stack
 
