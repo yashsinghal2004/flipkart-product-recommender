@@ -7,22 +7,22 @@ An AI-powered product recommendation chatbot built with Flask, LangChain, and RA
 ## 1. Interactive Chat Interface
 Users can engage in natural conversations with the AI assistant to get personalized product recommendations, ask questions about products, and receive expert advice based on real customer reviews.
 
-![Chat Interface](assistant_ui.png)
+<img src="assistant_ui.png" alt="Chat Interface" width="600">
 
 ## 2. Product Recommendations
 The system analyzes product reviews to provide context-aware recommendations, matching user queries with the most relevant products and their features.
 
-![Product Recommendations](assistant_output.png)
+<img src="assistant_output.png" alt="Product Recommendations" width="600">
 
 ## 3. Prometheus Monitoring
 Real-time metrics collection and monitoring of application health, request rates, and system performance through Prometheus.
 
-![Prometheus Dashboard](prometheus.png)
+<img src="prometheus.png" alt="Prometheus Dashboard" width="600">
 
 ## 4. Grafana Visualization
 Advanced dashboards and visualizations for monitoring application metrics, performance trends, and system health.
 
-![Grafana Dashboard](grafana.png)
+<img src="grafana.png" alt="Grafana Dashboard" width="600">
 
 ## Tech Stack
 
