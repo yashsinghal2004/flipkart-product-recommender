@@ -14,17 +14,17 @@ Users can engage in natural conversations with the AI assistant to get personali
 ### 2. Product Recommendations
 The system analyzes product reviews to provide context-aware recommendations, matching user queries with the most relevant products and their features.
 
-<img src="assistant_output.png" alt="Product Recommendations" width="700">
+<img src="assistant_output.png" alt="Product Recommendations" style="width: 100%;">
 
 ### 3. Prometheus Monitoring
 Real-time metrics collection and monitoring of application health, request rates, and system performance through Prometheus.
 
-<img src="prometheus.png" alt="Prometheus Dashboard" width="700">
+<img src="prometheus.png" alt="Prometheus Dashboard" style="width: 100%;">
 
 ### 4. Grafana Visualization
 Advanced dashboards and visualizations for monitoring application metrics, performance trends, and system health.
 
-<img src="grafana.png" alt="Grafana Dashboard" width="700">
+<img src="grafana.png" alt="Grafana Dashboard" style="width: 100%;">
 
 ## Tech Stack
 
