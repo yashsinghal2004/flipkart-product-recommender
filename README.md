@@ -178,54 +178,6 @@ kubectl port-forward svc/assistant-service 5000:80
 # Grafana: http://<node-ip>:32000
 ```
 
-## 🏗️ Project Structure
-
-```
-.
-├── app.py                      # Flask application entry point
-├── Dockerfile                  # Docker containerization
-├── requirements.txt            # Python dependencies
-├── setup.py                   # Package installation
-├── render.yaml                # Render deployment config
-├── app_deployment.yaml        # Kubernetes app deployment
-├── templates/                 # HTML templates
-│   └── index.html
-├── static/                    # CSS and static files
-│   └── style.css
-├── flipkart/                  # Application modules
-│   ├── config.py              # Configuration management
-│   ├── data_ingestion.py      # Vector store setup
-│   ├── data_converter.py      # CSV to Document conversion
-│   └── rag_chain.py           # RAG chain builder
-├── data/                      # Data files
-│   └── flipkart_product_review.csv
-├── prometheus/                # Prometheus configs
-│   ├── prometheus-configmap.yaml
-│   └── prometheus-deployment.yaml
-├── grafana/                   # Grafana configs
-│   └── grafana-deployment.yaml
-└── utils/                     # Utility modules
-    ├── custom_exception.py
-    └── logger.py
-```
-
-## Environment Variables
-
-| Variable | Description | Required |
-|----------|-------------|----------|
-| `ASTRA_DB_API_ENDPOINT` | AstraDB API endpoint | Yes |
-| `ASTRA_DB_APPLICATION_TOKEN` | AstraDB authentication token | Yes |
-| `ASTRA_DB_KEYSPACE` | AstraDB keyspace name | Yes |
-| `GROQ_API_KEY` | Groq API key for LLM | Yes |
-
-## API Endpoints
-
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/` | GET | Chat interface |
-| `/get` | POST | Process queries |
-| `/metrics` | GET | Prometheus metrics |
-
 ## Testing
 
 ```bash
