@@ -4,6 +4,21 @@
 
 An AI-powered product recommendation chatbot built with Flask, LangChain, and RAG (Retrieval-Augmented Generation), with comprehensive DevOps infrastructure with Kubernetes, Docker, Prometheus, and Grafana for production-ready deployment and monitoring.
 
+## Table of Contents
+
+- [Preview](#preview-flipkart-product-assistant--full-stack-deployment-and-monitoring)
+- [Tech Stack](#tech-stack)
+- [Context](#context)
+- [Features](#features)
+- [Quick Start](#quick-start)
+  - [Prerequisites](#prerequisites)
+  - [Setup](#setup)
+  - [Docker Deployment](#docker-deployment)
+  - [Kubernetes Deployment](#kubernetes-deployment)
+- [Testing](#testing)
+- [Contributing](#contributing)
+- [License](#license)
+
 ## Preview: Flipkart Product Assistant – Full Stack Deployment and Monitoring**
 
 ### 1. Interactive Chat Interface
